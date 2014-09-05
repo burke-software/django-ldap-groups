@@ -7,23 +7,29 @@ import simplejson as json
 from django.http import HttpResponse, HttpResponseNotAllowed
 
 
-
+# Ugly code is for legacy settings. We now prefer LDAP_ is always used.
 LDAP_URL = getattr(settings, 'LDAP_URL', None)
-BIND_USER = getattr(settings, 'BIND_USER', None)
-NT4_DOMAIN = getattr(settings, 'NT4_DOMAIN', None)
-BIND_USER = getattr(settings, 'BIND_USER', None)
-BIND_PASSWORD = getattr(settings, 'BIND_PASSWORD', None)
-SEARCH_DN = getattr(settings, 'SEARCH_DN', None)
+LDAP_NT4_DOMAIN = getattr(settings, 'LDAP_NT4_DOMAIN', None)
+if LDAP_NT4_DOMAIN == None:
+    LDAP_NT4_DOMAIN = getattr(settings, 'NT4_DOMAIN', None)
+LDAP_BIND_USER = getattr(settings, 'LDAP_BIND_USER', None)
+if LDAP_BIND_USER == None: 
+    LDAP_BIND_USER = getattr(settings, 'BIND_USER', None)
+LDAP_BIND_PASSWORD = getattr(settings, 'LDAP_BIND_PASSWORD', None)
+if LDAP_BIND_PASSWORD == None:
+    LDAP_BIND_PASSWORD = getattr(settings, 'BIND_PASSWORD', None)
+LDAP_SEARCH_DN = getattr(settings, 'LDAP_SEARCH_DN', None)
+if LDAP_SEARCH_DN == None:
+    LDAP_SEARCH_DN = getattr(settings, 'SEARCH_DN', None)
 # Use constance settings is available
 # But fall back to settings.py
 if getattr(settings, 'LDAP_USE_CONSTANCE', False) == True:
     from constance import config
     LDAP_URL = getattr(config, 'LDAP_URL', LDAP_URL)
-    BIND_USER = getattr(config, 'BIND_USER', BIND_USER)
-    NT4_DOMAIN = getattr(config, 'NT4_DOMAIN', NT4_DOMAIN)
-    BIND_USER = getattr(config, 'BIND_USER', BIND_USER)
-    BIND_PASSWORD = getattr(config, 'BIND_PASSWORD', BIND_PASSWORD)
-    SEARCH_DN = getattr(config, 'SEARCH_DN', SEARCH_DN)
+    LDAP_NT4_DOMAIN = getattr(config, 'LDAP_NT4_DOMAIN', LDAP_NT4_DOMAIN)
+    LDAP_BIND_USER = getattr(config, 'LDAP_BIND_USER', LDAP_BIND_USER)
+    LDAP_BIND_PASSWORD = getattr(config, 'LDAP_BIND_PASSWORD', LDAP_BIND_PASSWORD)
+    LDAP_SEARCH_DN = getattr(config, 'LDAP_SEARCH_DN', LDAP_SEARCH_DN)
 
 class LDAPSearchResult(object):
     """
@@ -44,11 +50,11 @@ def search(canonical_name):
     l.set_option(ldap.OPT_PROTOCOL_VERSION, 3)
     binddn = ''
     try:
-        binddn = "%s@%s" % (BIND_USER, NT4_DOMAIN)
+        binddn = "%s@%s" % (LDAP_BIND_USER, LDAP_NT4_DOMAIN)
     except AttributeError:
-        binddn = BIND_USER
-    l.simple_bind_s(binddn, BIND_PASSWORD)
-    base = SEARCH_DN
+        binddn = LDAP_BIND_USER
+    l.simple_bind_s(binddn, LDAP_BIND_PASSWORD)
+    base = LDAP_SEARCH_DN
     scope = ldap.SCOPE_SUBTREE
     retrieve_attributes = ['cn']
     
