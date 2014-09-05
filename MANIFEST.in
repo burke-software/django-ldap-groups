@@ -1,0 +1,4 @@
+include ldap_groups/LICENSE
+include ldap_groups/README
+include ldap_groups/settings.py.template
+recursive-include ldap_groups/templates *
