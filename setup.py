@@ -2,8 +2,8 @@
 
 from distutils.core import setup
 
-setup(name='django-ldap-groups',
-      version='0.1.3',
+setup(name='django-ldap-groups-bsc',
+      version='0.1.5',
       author='Peter Herndon',
       author_email='tpherndon@gmail.com',
       url='http://code.google.com/p/django-ldap-groups/',
@@ -22,5 +22,5 @@ setup(name='django-ldap-groups',
           'Topic :: Internet :: WWW/HTTP',
           'Topic :: System :: Systems Administration :: Authentication/Directory :: LDAP',
           ]
-          
+
       )

@@ -1,7 +1,7 @@
 import ldap
 import ldap.filter
 
-from django.conf import settings
+from ldap_groups import settings
 from django.contrib.auth.models import User, Group
 
 from ldap_groups.models import LDAPGroup
@@ -78,11 +78,14 @@ class ActiveDirectoryGroupMembershipSSLBackend(BaseGroupMembershipBackend):
         ldap.set_option(ldap.OPT_REFERRALS,0) # DO NOT TURN THIS OFF OR SEARCH WON'T WORK!
         l = ldap.initialize(settings.LDAP_URL)
         l.set_option(ldap.OPT_PROTOCOL_VERSION, 3)
-        binddn = "%s@%s" % (username,settings.NT4_DOMAIN)
+        binddn = "%s@%s" % (username,settings.LDAP_NT4_DOMAIN)
         l.simple_bind_s(binddn,password)
         return l
 
     def authenticate(self,username=None,password=None):
+        if settings.LDAP_URL in [None, '', 'ldap://:389']:
+            # LDAP is not configured so just ignore it
+            return
         try:
             if len(password) == 0:
                 return None
