@@ -1,3 +1,7 @@
+# Installation
+
+This fork is not yet well tested. But for the brave just pip install `django-ldap-groups-bsc`
+
 # Settings
 
 - `LDAP_URL` Full url of the ldap server. Example `ldap://example.com:389`
