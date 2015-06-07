@@ -1,7 +1,10 @@
+
 from django.db import models
 from django.contrib.auth.models import Group
+from django.utils.encoding import python_2_unicode_compatible
 
 
+@python_2_unicode_compatible
 class LDAPGroup(models.Model):
     """
     An LDAPGroup defines a mapping between an LDAP Organizational Unit (OU) and
@@ -17,8 +20,8 @@ class LDAPGroup(models.Model):
     org_unit = models.TextField()
     groups = models.ManyToManyField(Group, related_name='ldap_org_units')
 
-    def __unicode__(self):
-        return u'LDAP Groups for OU %s' % self.org_unit
+    def __str__(self):
+        return 'LDAP Groups for OU %s' % self.org_unit
 
     class Meta:
         ordering = ['org_unit']

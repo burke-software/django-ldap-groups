@@ -2,9 +2,10 @@ import ldap
 import ldap.filter
 
 from ldap_groups import settings
-from django.contrib.auth.models import User, Group
+from django.contrib.auth.models import User
 
 from ldap_groups.models import LDAPGroup
+
 
 class BaseGroupMembershipBackend(object):
     """
@@ -106,26 +107,30 @@ class ActiveDirectoryGroupMembershipSSLBackend(BaseGroupMembershipBackend):
             try:
                 l = self.bind_ldap(username, password)
                 # search
-                result = l.search_ext_s(settings.SEARCH_DN,ldap.SCOPE_SUBTREE,"sAMAccountName=%s" % username,settings.SEARCH_FIELDS)[0][1]
+                result = l.search_ext_s(
+                    settings.SEARCH_DN,
+                    ldap.SCOPE_SUBTREE,
+                    "sAMAccountName=%s" % username,
+                    settings.SEARCH_FIELDS)[0][1]
 
-                if result.has_key('memberOf'):
+                if 'memberOf' in result:
                     membership = result['memberOf']
                 else:
                     membership = None
 
                 # get email
-                if result.has_key('mail'):
+                if 'mail' in result:
                     mail = result['mail'][0]
                 else:
                     mail = None
                 # get surname
-                if result.has_key('sn'):
+                if 'sn' in result:
                     last_name = result['sn'][0]
                 else:
                     last_name = None
 
                 # get display name
-                if result.has_key('givenName'):
+                if 'givenName' in result:
                     first_name = result['givenName'][0]
                 else:
                     first_name = None
@@ -134,7 +139,7 @@ class ActiveDirectoryGroupMembershipSSLBackend(BaseGroupMembershipBackend):
 
                 user = User(username=username,first_name=first_name,last_name=last_name,email=mail)
 
-            except Exception, e:
+            except Exception as e:
                 return None
 
             user.is_staff = False
@@ -205,31 +210,31 @@ class eDirectoryGroupMembershipSSLBackend(BaseGroupMembershipBackend):
                                         settings.SEARCH_FIELDS)[0][1]
                 l.unbind_s()
 
-                if result.has_key('groupMembership'):
+                if 'groupMembership' in result:
                     membership = result['groupMembership']
                 else:
                     membership = None
 
                 # get email
-                if result.has_key('mail'):
+                if 'mail' in result:
                     mail = result['mail'][0]
                 else:
                     mail = None
                 # get surname
-                if result.has_key('sn'):
+                if 'sn' in result:
                     last_name = result['sn'][0]
                 else:
                     last_name = None
 
                 # get display name
-                if result.has_key('givenName'):
+                if 'givenName' in result:
                     first_name = result['givenName'][0]
                 else:
                     first_name = None
 
 
                 user = User(username=stripped_name,first_name=first_name,last_name=last_name,email=mail)
-            except Exception, e:
+            except Exception as e:
                 return None
 
             user.is_staff = False
@@ -293,30 +298,30 @@ class OpenDirectoryBackend(BaseGroupMembershipBackend):
 
                 membership = []
                 for group in group_result:
-                    if group[1].has_key('memberUid') and stripped_name in group[1]['memberUid']:
+                    if 'memberUid' in group[1] and stripped_name in group[1]['memberUid']:
                         membership.append("cn=%s,cn=groups,%s" % (group[1]['cn'][0], settings.SEARCH_DN))
 
                 if len(membership) == 0:
                     membership = None
 
                 # get email
-                if result.has_key('mail'):
+                if 'mail' in result:
                     mail = result['mail'][0]
                 else:
                     mail = ''
                 # get surname
-                if result.has_key('sn'):
+                if 'sn' in result:
                     last_name = result['sn'][0]
                 else:
                     last_name = None
 
                 # get display name
-                if result.has_key('givenName'):
+                if 'givenName' in result:
                     first_name = result['givenName'][0]
                 else:
                     first_name = None
                 user = User(username=stripped_name,first_name=first_name,last_name=last_name,email=mail)
-            except Exception, e:
+            except Exception as e:
                 return None
 
             user.is_staff = False
