@@ -1,9 +1,8 @@
 #!/usr/bin/env python
-
-from distutils.core import setup
+from setuptools import setup
 
 setup(name='django-ldap-groups-bsc',
-      version='0.1.6',
+      version='0.1.7',
       author='Peter Herndon',
       author_email='tpherndon@gmail.com',
       url='http://code.google.com/p/django-ldap-groups/',
