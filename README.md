@@ -1,6 +1,10 @@
+This is a fork of django-ldap-groups that adds python 3 support, 1.7 migrationsm
+optional django-constance settings, and bug fixes. It is currently used in production
+but could always use additional testing especially in python 3.
+
 # Installation
 
-This fork is not yet well tested. But for the brave just pip install `django-ldap-groups-bsc`
+`pip install django-ldap-groups-bsc`
 
 # Settings
 
@@ -27,3 +31,8 @@ use with django-tenant-schemas when using the constance database backend.
 'LDAP_BIND_PASSWORD': ('', 'Bind user\'s password'),
 'LDAP_SEARCH_DN': ('', 'DC=admin,DC=example,DC=com'),
 ```
+
+# TODO
+
+- Add unit tests
+- Test python 3 support
