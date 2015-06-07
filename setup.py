@@ -2,7 +2,7 @@
 from setuptools import setup
 
 setup(name='django-ldap-groups-bsc',
-      version='0.1.8',
+      version='0.1.8.1',
       author='Peter Herndon',
       author_email='tpherndon@gmail.com',
       url='http://code.google.com/p/django-ldap-groups/',
